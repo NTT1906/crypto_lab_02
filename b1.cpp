@@ -4,25 +4,6 @@
 #include <string>
 using namespace std;
 
-// Chuyển bui thành hex little‑endian
-string bui_to_hex_le(const bui& x) {
-	string full = bui_to_hex(x, false);
-	string hex;
-	hex.reserve(full.size());
-	for (char c : full) {
-		if (!isspace((unsigned char)c))
-			hex.push_back(c);
-	}
-	size_t pos = 0;
-	while (pos < hex.size() && hex[pos] == '0') ++pos;
-	string trimmed = (pos == hex.size()) ? string("0") : hex.substr(pos);
-
-	for (char &c : trimmed)
-		c = (char)toupper((unsigned char)c);
-	reverse(trimmed.begin(), trimmed.end());
-	return trimmed;
-}
-
 int main(int argc, char* argv[]) {
 	if (argc != 3) return 1;
 	if (!freopen(argv[1], "r", stdin)) return 1;
