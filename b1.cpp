@@ -4,6 +4,7 @@
 #include <string>
 using namespace std;
 
+// Bài 1: Căn nguyên thủy modulo p
 int main(int argc, char* argv[]) {
 	if (argc != 3) return 1;
 	if (!freopen(argv[1], "r", stdin)) return 1;
