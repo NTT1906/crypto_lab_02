@@ -15,9 +15,9 @@ int main(int argc, char* argv[]) {
 	bui g = read_bui_le();
 	bui a = read_bui_le();
 	bui b = read_bui_le();
-	bui A = pow_mod(g, a, p); // g^a mod p
-	bui B = pow_mod(g, b, p); // g^b mod p
-	bui K = pow_mod(A, b, p); // g^ab mod p = (g^a)^b mod p = A^b mod p
+	bui A = mr_pow_mod(g, a, p); // g^a mod p
+	bui B = mr_pow_mod(g, b, p); // g^b mod p
+	bui K = mr_pow_mod(A, b, p); // g^ab mod p = (g^a)^b mod p = A^b mod p
 	std::cout << str_reverse(bui_to_hex(A, true)) << '\n';
 	std::cout << str_reverse(bui_to_hex(B, true)) << '\n';
 	std::cout << str_reverse(bui_to_hex(K, true)) << '\n';

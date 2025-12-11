@@ -30,14 +30,17 @@ int main(int argc, char* argv[]) {
 	sub_ip(pm1, one);
 
 	MontgomeryReducer mr(p);
+	bui cg = mr.convertIn(g);
 
 	for (auto &q : U) {
 		bui e, r;
 		divmod(pm1, q, e, r); // e = (p-1)/q
 		// tính t = g^e mod p
-		bui t = mr.pow(g, e);
+		bui t = mr.pow(cg, e);
 		// bui t = pow_mod(g, e, p);
+		// bui t = mr_pow_mod(g, e, p);
 		if (cmp(t, mr.convertedOne) == 0) {
+		// if (cmp(t, bui1()) == 0) {
 			cout << "0\n";
 			return 0;
 		}
