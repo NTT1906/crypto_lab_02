@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
 	stringstream ss(line);
 	string tok;
 	while (ss >> tok) {
-		U.push_back(bui_from_hex(normalize_hex_le_to_be(tok)));
+		U.push_back(bui_from_hex(str_reverse(tok)));
 	}
 	bui g = read_bui_le();
 

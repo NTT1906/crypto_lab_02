@@ -18,10 +18,10 @@ int main(int argc, char* argv[]) {
 	bui c2 = read_bui_le();
 	bui s_inv;
 	bui h = mr_pow_mod(g, x, p); // h = g^x mod p
-	std::cout << normalize_hex_le_to_be(bui_to_hex(h)) << '\n';
+	std::cout << str_reverse(bui_to_hex(h, true)) << '\n';
 	bui s = pow_mod(c1, x, p); // s = c1^x mod p
 	mod_inverse(s, p, s_inv); // s_inv = s^(-1) mod p
 	bui m = mod_native(mul(c2, s_inv), p); // m - c2 * s_inv mod p
-	std::cout << normalize_hex_le_to_be(bui_to_hex(m)) << '\n';
+	std::cout << str_reverse(bui_to_hex(m, true)) << '\n';
 	return 0;
 }
