@@ -11,6 +11,7 @@ PROJECT_TESTS = [
     "project_02_04",
 ]
 
+assert len(EXECUTABLES) == len(PROJECT_TESTS), "EXECUTABLES and PROJECT_TESTS size mismatch"
 def run_once(exe, inp, out_tmp):
     if out_tmp.exists():
         out_tmp.unlink()
@@ -55,8 +56,8 @@ def test_exe(exe_name: str, tests: Path):
 
 
 if __name__ == "__main__":
-    for i in range(len(EXECUTABLES)):
-        test_exe(EXECUTABLES[i], ASSET_DIR / PROJECT_TESTS[i])
+    for exe_name, proj_name in zip(EXECUTABLES, PROJECT_TESTS):
+        test_exe(exe_name, ASSET_DIR / proj_name)
     tmp = PROJECT_DIR / "_tmp.out"
     if tmp.exists():
         tmp.unlink()
