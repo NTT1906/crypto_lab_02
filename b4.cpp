@@ -2,7 +2,6 @@
 #define BI_BIT 512
 #include "bigint.h"
 #include <string>
-using namespace std;
 
 // Bài 4: Chữ ký ElGamal
 int main(int argc, char* argv[]) {
@@ -11,5 +10,17 @@ int main(int argc, char* argv[]) {
 	if (!freopen(argv[2], "w", stdout)) return 1;
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
+
+	bui p = read_bui_le();
+	bui g = read_bui_le();
+	bui y = read_bui_le(); // public key
+	bui m = read_bui_le(); // message
+	bui r = read_bui_le();
+	bui h = read_bui_le();
+	bui gm = pow_mod(g, m, p); // g^m mod p
+	bui yr = pow_mod(y, r, p); // y^r mod p
+	bui rh = pow_mod(r, h, p); // r^h mod p
+	bui yrrh = mod_native(mul(yr, rh), p); // (y^r * r^h) mod p
+	std::cout << (cmp(gm, yrrh) ? "1\n" : "0\n");
 	return 0;
 }
