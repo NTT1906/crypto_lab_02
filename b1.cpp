@@ -1,5 +1,5 @@
 #include <iostream>
-#define BI_BIT 512
+#define BI_BIT 576
 #include "bigint.h"
 #include <string>
 using namespace std;
