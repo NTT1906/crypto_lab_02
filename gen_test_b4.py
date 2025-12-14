@@ -34,6 +34,7 @@ def run_b4(p, g, y, m, r, h_sig) -> int:
         timeout=5,
     )
     if r_proc.returncode != 0 or not out_path.exists():
+        print(inp)
         raise RuntimeError(f"b4.exe failed: {r_proc.stderr}")
 
     out = out_path.read_text(encoding="utf-8").strip()
@@ -44,7 +45,7 @@ def run_b4(p, g, y, m, r, h_sig) -> int:
         raise ValueError(f"Unexpected output: {out!r}")
     return int(out)
 
-def random_prime(bits: int = 32) -> int:
+def random_prime(bits: int = 512) -> int:
     low = 1 << (bits - 1)
     high = 1 << bits
     return randprime(low, high)
@@ -65,7 +66,7 @@ def gen_valid_signature():
       r = g^k mod p
       h = (m - x*r) * k^{-1} mod (p-1)
     """
-    p = random_prime(32)
+    p = random_prime()
     g = random.randint(2, p - 2)
     x = random.randint(1, p - 2)
     y = pow(g, x, p)

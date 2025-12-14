@@ -2,6 +2,29 @@ import random
 import subprocess
 from pathlib import Path
 from sympy import randprime, factorint  # pip install sympy
+import requests
+import gmpy2
+def get_factors_numbers_only(number):
+    url = f"http://factordb.com/api?query={number}"
+    response = requests.get(url)
+    data = response.json()
+    status = data.get('status')
+    if status in ['CF', 'FF']:
+        # Extract only the factor[0], ignoring exponent
+        return [int(factor[0]) for factor in data.get('factors', [])]
+    return []
+
+def small_factors(n, limit=2000000):
+    n = gmpy2.mpz(n)
+    factors = []
+    i = 2
+    while i <= limit and n > 1:
+        if n % i == 0:
+            factors.append(i)
+            n //= i
+        else:
+            i += 1
+    return factors, n
 
 PROJECT_DIR = Path(__file__).parent
 EXE = PROJECT_DIR / "b1.exe"
@@ -52,15 +75,11 @@ def run_b1(p, qs, g) -> int:
         raise ValueError(f"Unexpected output: {out!r}")
     return int(out)
 
-def random_prime_for_b1(bits: int = 20) -> int:
+def random_prime_for_b1(bits: int = 512) -> int:
     # Keep p small enough that factorint(p-1) is cheap.
     low = 1 << (bits - 1)
     high = 1 << bits
-    while True:
-        p = randprime(low, high)
-        # Ensure p-1 has at least one small factor, just to avoid pathological cases.
-        if p > 3:
-            return p
+    return randprime(low, high)
 
 def is_primitive_root_py(p: int, g: int, qs) -> bool:
     """
@@ -75,12 +94,21 @@ def is_primitive_root_py(p: int, g: int, qs) -> bool:
     return True
 
 def random_case():
-    p = random_prime_for_b1(20)
+    p = random_prime_for_b1(512)
+    print(p)
+    fac, remaining = small_factors(p - 1)
+
+    # fac = factordb_factors(p - 1)
     # factorint returns {prime: exponent}
-    fac = factorint(p - 1)
-    qs = sorted(fac.keys())  # distinct prime factors
+    # fac = factorint(p - 1)
+    qs = sorted(fac)  # distinct prime factors
+    print(qs)
     # Choose random g in [2, p-2]
     g = random.randint(2, p - 2)
+    # x = random.randint(2, p - 2)
+    # print(x)
+    # g = pow(x, 2, p)
+    # g = guaranteed_non_primitive(p)
     return p, qs, g
 
 def main():
@@ -88,6 +116,7 @@ def main():
     for t in range(1, trials + 1):
         p, qs, g = random_case()
         expected = 1 if is_primitive_root_py(p, g, qs) else 0
+        print(expected)
 
         try:
             got = run_b1(p, qs, g)
@@ -111,8 +140,8 @@ def main():
             print("  got     :", got)
             return
 
-        if t % 10 == 0:
-            print(f"[OK] up to trial {t}")
+        # if t % 10 == 0:
+        print(f"[OK] up to trial {t}")
 
     print("All b1 random tests passed")
 

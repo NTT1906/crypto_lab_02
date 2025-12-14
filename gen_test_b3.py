@@ -52,13 +52,13 @@ def run_b3(p, g, x, c1, c2):
     m_exe = from_rev_hex(lines[1])
     return h_exe, m_exe
 
-def random_prime(bits: int = 32) -> int:
+def random_prime(bits: int = 512) -> int:
     low = 1 << (bits - 1)
     high = 1 << bits
     return randprime(low, high)
 
 def random_case():
-    p = random_prime(32)
+    p = random_prime()
     g = random.randint(2, p - 2)
     x = random.randint(1, p - 2)
     k = random.randint(1, p - 2)      # ephemeral key

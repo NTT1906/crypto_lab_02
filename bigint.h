@@ -40,7 +40,7 @@ typedef uint64_t u64;
 #define ALWAYS_INLINE inline
 #endif
 
-#if !defined(_MSC_VER) && defined(__cpp_constexpr)
+#if !defined(_MSC_VER) && defined(__cpp_constexpr) && __cplusplus >= 201703L
 #define OP_CONSTEXPR constexpr
 #else
 #define OP_CONSTEXPR
@@ -120,20 +120,20 @@ inline u32 set_bit(const u32 num, const u32 pos, const u32 val) {
 }
 
 inline u32 get_bit(const bui &a, const u32 pos) {
-	assert(pos < BI_N * SBU32);
+	assert(pos < BI_BIT);
 	u32 k = BI_N - 1 - pos / SBU32;
 	return get_bit(a[k], pos % SBU32);
 }
 
 // set in-place
 inline void set_bit_ip(bui &a, const u32 pos, const u32 val) {
-	assert(pos < BI_N * SBU32 && "Cannot set bit outside the scope of the big integer");
+	assert(pos < BI_BIT && "Cannot set bit outside the scope of the big integer");
 	u32 k = BI_N - 1 - pos / SBU32;
 	a[k] = set_bit(a[k], pos % 32, val);
 }
 
 inline void set_bit_ip(bul &a, const u32 pos, const u32 val) {
-	assert(pos < BI_N * 2 * SBU32 && "Cannot set bit outside the scope of the big integer");
+	assert(pos < BI_BIT * 2 && "Cannot set bit outside the scope of the big integer");
 	u32 k = BI_N * 2 - 1 - pos / SBU32;
 	a[k] = set_bit(a[k], pos % 32, val);
 }
@@ -1355,7 +1355,7 @@ struct MontgomeryReducer {
 	// Montgomery exponentiation: x^e (e standard, x and result in Montgomery form)
 	bui pow(bui x, const bui& e) const {
 		bui r = convertedOne;
-		u32 hb = highest_bit(e) + 1;
+		u32 hb = highest_bit(e);
 		for (u32 i = 0; i < hb; ++i) {
 			if (get_bit(e, i)) {
 				r = multiply(r, x);

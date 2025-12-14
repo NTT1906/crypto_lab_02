@@ -55,13 +55,13 @@ def run_b2(p, g, a, b):
     K = from_rev_hex(lines[2])
     return A, B, K
 
-def random_prime(bits: int = 32) -> int:
+def random_prime(bits: int = 512) -> int:
     low = 1 << (bits - 1)
     high = 1 << bits
     return randprime(low, high)
 
 def random_case():
-    p = random_prime(32)
+    p = random_prime()
     g = random.randint(2, p - 2)
     a = random.randint(1, p - 2)
     b = random.randint(1, p - 2)
